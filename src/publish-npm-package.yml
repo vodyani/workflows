@@ -1,0 +1,34 @@
+name: "Publish NPM Package"
+
+on:
+  workflow_call:
+    secrets:
+        NPM_CI_TOKEN:
+          required: true
+
+jobs:
+  publish_package:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['16']
+    steps:
+      - uses: actions/checkout@v2
+      # Deploy node_version
+      - name: use_v${{ matrix.node_version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      # 1. RUN build
+      - name: npm install and build
+        run: |
+          npm i
+          npm run build
+      # 2. RUN publish
+      - name: npm publish
+        run: |
+          echo -e "//npm.pkg.github.com/:_authToken=${NPM_CI_TOKEN} \n//registry.npmjs.org/:_authToken=${NPM_CI_TOKEN}" > .npmrc
+          npm publish --access public
+        env:
+          NPM_CI_TOKEN: ${{secrets.NPM_CI_TOKEN}}

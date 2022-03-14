@@ -1,0 +1,32 @@
+name: "PrePublish Check And Test"
+
+on:
+  workflow_call:
+
+jobs:
+  check_and_test:
+    name: check and test on node ${{ matrix.node_version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node_version: ['12', '14', '16']
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+      - uses: actions/checkout@v1
+      # Deploy node_version
+      - name: use_v${{ matrix.node_version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: 'npm'
+      # 1. RUN install
+      - name: npm_install
+        run: |
+          npm ci
+          npm i && npm i -g eslint
+      # 2. RUN eslint
+      - name: run_eslint
+        run: npm run lint
+      # 3. RUN jest
+      - name: run_jest
+        run: npm run test

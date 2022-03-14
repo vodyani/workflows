@@ -7,7 +7,7 @@ on:
           required: true
 
 jobs:
-  publish_codecov:
+  publish_release:
     runs-on: ubuntu-latest
     strategy:
       matrix:

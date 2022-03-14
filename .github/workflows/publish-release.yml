@@ -13,12 +13,21 @@ jobs:
       matrix:
         node-version: ['16']
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
 
       # 1. Set out version
       - name: read_version_set_out
         id: set_out_version
         run: echo '::set-output name=PACKAGE_VERSION::$npm_package_version'
+
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: "App-Artifacts"
+          path: artifacts/*
 
       # 2. Set out changelog
       - name: read_changelog_set_out

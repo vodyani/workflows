@@ -25,14 +25,14 @@ jobs:
         id: set_out_changelog
         uses: mikepenz/release-changelog-builder-action@v1
         env:
-          GITHUB_CI_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
 
       # 3. RUN create release and tag
       - name: create_release_and_tag
         id: create_release
         uses: actions/create-release@v1
         env: 
-          GITHUB_CI_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
           PACKAGE_VERSION: ${{ steps.set_out_version.outputs.PACKAGE_VERSION }}"
         with:
           tag_name: ${{ env.PACKAGE_VERSION }}

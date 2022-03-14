@@ -13,30 +13,14 @@ jobs:
       matrix:
         node-version: ['16']
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 100
+      - uses: actions/checkout@v2
 
       # 1. Set out version
       - name: read_version_set_out
         id: set_out_version
         run: echo '::set-output name=PACKAGE_VERSION::$npm_package_version'
 
-      - name: Archive Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: "App-Artifacts"
-          path: artifacts/*
-
-      # 2. Set out changelog
-      - name: read_changelog_set_out
-        id: set_out_changelog
-        uses: mikepenz/release-changelog-builder-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
-
-      # 3. RUN create release and tag
+      # 2. RUN create release and tag
       - name: create_release_and_tag
         id: create_release
         uses: actions/create-release@v1
@@ -46,6 +30,5 @@ jobs:
         with:
           tag_name: ${{ env.PACKAGE_VERSION }}
           release_name: Release ${{ env.PACKAGE_VERSION }}
-          body: ${{ steps.set_out_changelog.outputs.changelog }}
           draft: false
           prerelease: false

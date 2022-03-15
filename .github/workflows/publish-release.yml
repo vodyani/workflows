@@ -15,12 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Deploy node_version
-      - name: use_v${{ matrix.node_version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-
       # 1. Set out version
       - name: read_version_set_out
         uses: nyaa8/package-version@v1
@@ -31,7 +25,6 @@ jobs:
         uses: actions/create-release@v1
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
-          PACKAGE_VERSION: ${{ steps.set_out_version.outputs.PACKAGE_VERSION }}"
         with:
           tag_name: ${{ env.PACKAGE_VERSION }}
           release_name: Release ${{ env.PACKAGE_VERSION }}

@@ -37,6 +37,6 @@ jobs:
         with:
           draft: false
           prerelease: false
-          tag_name: ${{ env.PACKAGE_VERSION }}
-          release_name: Release ${{ env.PACKAGE_VERSION }}
+          tag_name: v${{ env.PACKAGE_VERSION }}
+          release_name: v${{ env.PACKAGE_VERSION }}
           body: ${{ steps.set_out_changelog.outputs.changelog }}

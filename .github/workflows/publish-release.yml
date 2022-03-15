@@ -24,7 +24,7 @@ jobs:
         id: set_out_changelog
         uses: mikepenz/release-changelog-builder-action@v1
         with:
-          fromTag: ${{ env.PACKAGE_VERSION }}
+          toTag: v${{ env.PACKAGE_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
 

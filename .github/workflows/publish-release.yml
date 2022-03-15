@@ -15,8 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: ls
-        run: ls
+      # Deploy node_version
+      - name: use_v${{ matrix.node_version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
 
       # 1. Set out version
       - name: read_version_set_out

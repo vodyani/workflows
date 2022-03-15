@@ -13,24 +13,29 @@ jobs:
       matrix:
         node-version: ['16']
     steps:
+      # 1. Checkout github ref
       - uses: actions/checkout@v2
-      # Deploy node_version
-      - name: use_v${{ matrix.node_version }}
+
+      # 2. Deploy node_version
+      - name: setup node.js v.${{ matrix.node_version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      # 1. RUN install
-      - name: npm install
+
+      # 3. RUN install
+      - name: install
         run: npm i && npm i -g codecov @mole-hill/jest-mocha-formatter
-      # 2. RUN jest and build coverage report
+
+      # 4. RUN jest and build coverage report
       - name: run jest and build coverage report
         run: JEST_REPORT_JSON=${REPORT_JSON} npm run test:coverage --ci --testResultsProcessor="${RESULT_PROCESSOR}"
         env:
           REPORT_JSON: "./coverage/report.json"
           RESULT_PROCESSOR: "@mole-hill/jest-mocha-formatter"
-      # 3. RUN codecov
+
+      # 5. Upload codecov
       - name: upload codecov
         run: cd coverage && codecov --disable=gcov --token=$CODE_COV_CI_TOKEN
         env:
-          CODE_COV_CI_TOKEN: ${{secrets.CODE_COV_CI_TOKEN}}
+          CODE_COV_CI_TOKEN: ${{ secrets.CODE_COV_CI_TOKEN }}

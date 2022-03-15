@@ -1,4 +1,4 @@
-name: "Publish Release Tag"
+name: "Publish Release"
 
 on:
   workflow_call:
@@ -9,24 +9,34 @@ on:
 jobs:
   publish_release:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ['16']
     steps:
+      # 1. Checkout github ref
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
 
-      # 1. Set out version
+      # 2. Set out version --> `env.PACKAGE_VERSION`
       - name: read_version_set_out
         uses: nyaa8/package-version@v1
 
-      # 2. RUN create release and tag
+      # 3. Set out changelog --> `steps.set_out_changelog.outputs.changelog`
+      - name: read_changelog_set_out
+        id: set_out_changelog
+        uses: mikepenz/release-changelog-builder-action@v1
+        with:
+          toTag: ${{ env.PACKAGE_VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
+
+      # 4. RUN create release and tag
       - name: create_release_and_tag
         id: create_release
         uses: actions/create-release@v1
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
         with:
-          tag_name: ${{ env.PACKAGE_VERSION }}
-          release_name: Release ${{ env.PACKAGE_VERSION }}
           draft: false
           prerelease: false
+          tag_name: ${{ env.PACKAGE_VERSION }}
+          release_name: Release ${{ env.PACKAGE_VERSION }}
+          body: ${{ steps.set_out_changelog.outputs.changelog }}

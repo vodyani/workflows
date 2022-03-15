@@ -12,21 +12,26 @@ jobs:
         node_version: ['12', '14', '16']
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-      - uses: actions/checkout@v1
-      # Deploy node_version
-      - name: use_v${{ matrix.node_version }}
-        uses: actions/setup-node@v1
+      # 1. Checkout github ref
+      - uses: actions/checkout@v2
+
+      # 2. Deploy node_version
+      - name: setup node.js v.${{ matrix.node_version }}
+        uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      # 1. RUN install
+
+      # 3. RUN install
       - name: npm_install
         run: |
           npm ci
           npm i && npm i -g eslint
-      # 2. RUN eslint
+
+      # 4. RUN eslint
       - name: run_eslint
         run: npm run lint
-      # 3. RUN jest
+
+      # 5. RUN jest
       - name: run_jest
         run: npm run test

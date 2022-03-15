@@ -13,22 +13,26 @@ jobs:
       matrix:
         node-version: ['16']
     steps:
+      # 1. Checkout github ref
       - uses: actions/checkout@v2
-      # Deploy node_version
-      - name: use_v${{ matrix.node_version }}
+
+      # 2. Deploy node_version
+      - name: setup node.js v.${{ matrix.node_version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      # 1. RUN build
-      - name: npm install and build
+
+      # 3. RUN build
+      - name: build
         run: |
           npm i
           npm run build
-      # 2. RUN publish
-      - name: npm publish
+
+      # 4. RUN publish
+      - name: publish
         run: |
           echo -e "//npm.pkg.github.com/:_authToken=${NPM_CI_TOKEN} \n//registry.npmjs.org/:_authToken=${NPM_CI_TOKEN}" > .npmrc
           npm publish --access public
         env:
-          NPM_CI_TOKEN: ${{secrets.NPM_CI_TOKEN}}
+          NPM_CI_TOKEN: ${{ secrets.NPM_CI_TOKEN }}

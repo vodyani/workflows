@@ -19,12 +19,13 @@ jobs:
       - name: read_version_set_out
         uses: nyaa8/package-version@v1
 
-      # 3. Set out changelog --> `steps.set_out_changelog.outputs.changelog`
+      # 3. Set out changelog --> `steps.changelog.outputs.changelog`
       - name: read_changelog_set_out
-        id: set_out_changelog
-        uses: mikepenz/release-changelog-builder-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
+        id: changelog
+        uses: loopwerk/tag-changelog@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          exclude_types: other,doc,chore
 
       # 4. RUN create release and tag
       - name: create_release_and_tag
@@ -35,6 +36,6 @@ jobs:
         with:
           draft: false
           prerelease: false
-          tag_name: v${{ env.PACKAGE_VERSION }}
-          release_name: v${{ env.PACKAGE_VERSION }}
-          body: ${{ steps.set_out_changelog.outputs.changelog }}
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: ${{ steps.changelog.outputs.changes }}

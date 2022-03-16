@@ -2,9 +2,13 @@ name: "Publish NPM Package"
 
 on:
   workflow_call:
+    inputs:
+      enable_build:
+        required: true
+        type: boolean
     secrets:
-        NPM_CI_TOKEN:
-          required: true
+      NPM_CI_TOKEN:
+        required: true
 
 jobs:
   publish_package:
@@ -32,6 +36,7 @@ jobs:
 
       # 3. RUN build
       - name: build
+        if: ${{ inputs.enable_build }}
         run: |
           npm i
           npm run build

@@ -25,7 +25,7 @@ jobs:
         uses: loopwerk/tag-changelog@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          config_file: vodyani/workflows/.github/tag-changelog-config.js@master
+          config_file: .github/config/tag-changelog-config.js
 
       # 4. RUN create release and tag
       - name: create_release_and_tag
@@ -45,5 +45,5 @@ jobs:
         uses: tukasz/direct-merge-action@master
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
-          source-branch: master
-          target-branch: release
+          source-branch: release
+          target-branch: master

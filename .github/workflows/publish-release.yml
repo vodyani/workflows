@@ -36,6 +36,6 @@ jobs:
         with:
           draft: false
           prerelease: false
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: v${{ env.PACKAGE_VERSION }}
+          release_name: v${{ env.PACKAGE_VERSION }}
           body: ${{ steps.changelog.outputs.changes }}

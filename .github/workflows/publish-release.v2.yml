@@ -22,7 +22,7 @@ jobs:
       # 3. Set out changelog --> `steps.changelog.outputs.changelog`
       - name: read_changelog_set_out
         id: build_changelog
-        uses: mikepenz/release-changelog-builder-action@{latest-release}
+        uses: mikepenz/release-changelog-builder-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
 

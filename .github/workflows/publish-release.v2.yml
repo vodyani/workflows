@@ -1,0 +1,48 @@
+name: "Publish Release"
+
+on:
+  workflow_call:
+    secrets:
+        GITHUB_CI_TOKEN:
+          required: true
+
+jobs:
+  publish_release:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout github ref
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
+
+      # # 2. Set out version --> `env.PACKAGE_VERSION`
+      # - name: read_version_set_out
+      #   uses: nyaa8/package-version@v1
+
+      # 3. Set out changelog --> `steps.changelog.outputs.changelog`
+      - name: read_changelog_set_out
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@{latest-release}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 4. RUN create release and tag
+      - name: create_release_and_tag
+        id: create_release
+        uses: actions/create-release@v1
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
+        with:
+          draft: false
+          prerelease: false
+          tag_name: v${{ env.PACKAGE_VERSION }}
+          release_name: v${{ env.PACKAGE_VERSION }}
+          body: ${{ steps.build_changelog.outputs.changelog }}
+
+      # 5. MERGE release --> master
+      # - name: Automatic Merge
+      #   uses: tukasz/direct-merge-action@master
+      #   with:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
+      #     source-branch: release
+      #     target-branch: master

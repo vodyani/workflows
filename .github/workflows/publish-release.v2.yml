@@ -24,7 +24,7 @@ jobs:
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@{latest-release}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
 
       # 4. RUN create release and tag
       - name: create_release_and_tag

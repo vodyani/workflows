@@ -19,28 +19,15 @@ jobs:
       - name: read_version_set_out
         uses: nyaa8/package-version@v1
 
-      # 3. Set out changelog --> `steps.changelog.outputs.changelog`
-      - name: read_changelog_set_out
-        id: changelog
-        uses: loopwerk/tag-changelog@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          config_file: .github/config/tag-changelog-config.js
-
-      # 4. RUN create release and tag
-      - name: create_release_and_tag
-        id: create_release
-        uses: actions/create-release@v1
-        env: 
+      # 3. Auto Release
+      - name: auto create release
+        shell: pwsh
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
-        with:
-          draft: false
-          prerelease: false
-          tag_name: v${{ env.PACKAGE_VERSION }}
-          release_name: v${{ env.PACKAGE_VERSION }}
-          body: ${{ steps.changelog.outputs.changes }}
+        run: |
+          gh release create --generate-notes ${{ env.PACKAGE_VERSION }}
 
-      # 5. MERGE release --> master
+      # 4. MERGE release --> master
       - name: Automatic Merge
         uses: tukasz/direct-merge-action@master
         with:

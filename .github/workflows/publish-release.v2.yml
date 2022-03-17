@@ -22,7 +22,7 @@ jobs:
       # 3. Set out changelog --> `steps.changelog.outputs.changelog`
       - name: read_changelog_set_out
         id: build_changelog
-        uses: mikepenz/release-changelog-builder-action@v2
+        uses: mikepenz/release-changelog-builder-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
 
@@ -35,8 +35,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          tag_name: v${{ env.PACKAGE_VERSION }}
-          release_name: v${{ env.PACKAGE_VERSION }}
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
           body: ${{ steps.build_changelog.outputs.changelog }}
 
       # 5. MERGE release --> master

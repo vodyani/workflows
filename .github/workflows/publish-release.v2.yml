@@ -23,7 +23,9 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           prerelease: false
+          title: "${{ env.PACKAGE_VERSION }}"
           repo_token: "${{ secrets.GITHUB_CI_TOKEN }}"
+          automatic_release_tag: "${{ env.PACKAGE_VERSION }}"
 
       # # 4. RUN create release and tag
       # - name: create_release_and_tag

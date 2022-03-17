@@ -15,14 +15,16 @@ jobs:
         with:
           fetch-depth: 100
 
-      # # 2. Set out version --> `env.PACKAGE_VERSION`
-      # - name: read_version_set_out
-      #   uses: nyaa8/package-version@v1
+      # 2. Set out version --> `env.PACKAGE_VERSION`
+      - name: read_version_set_out
+        uses: nyaa8/package-version@v1
 
       # 3. Set out changelog --> `steps.changelog.outputs.changelog`
       - name: read_changelog_set_out
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v1
+        with:
+          toTag: ${{ env.PACKAGE_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
 
@@ -35,8 +37,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          tag_name: ${{ env.PACKAGE_VERSION }}
+          release_name: ${{ env.PACKAGE_VERSION }}
           body: ${{ steps.build_changelog.outputs.changelog }}
 
       # 5. MERGE release --> master

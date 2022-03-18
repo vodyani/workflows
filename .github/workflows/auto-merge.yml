@@ -1,0 +1,30 @@
+name: "Auto Merge"
+
+on:
+  workflow_call:
+    secrets:
+      GITHUB_CI_TOKEN:
+        required: true
+    inputs:
+      source_branch:
+        required: true
+        type: string
+      target_branch:
+        required: true
+        type: string
+
+jobs:
+  publish_release:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout github ref
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 100
+
+      - name: Automatic Merge
+        uses: tukasz/direct-merge-action@master
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
+          source-branch: ${{ inputs.source_branch }}
+          target-branch: ${{ inputs.target_branch }}

@@ -19,18 +19,10 @@ jobs:
       - name: read_version_set_out
         uses: nyaa8/package-version@v1
 
-      # 3. Auto Release
-      - name: auto create release
+      # 3. Auto create release
+      - name: create release
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
         run: |
           gh release create --generate-notes ${{ env.PACKAGE_VERSION }}
-
-      # 4. MERGE release --> master
-      - name: Automatic Merge
-        uses: tukasz/direct-merge-action@master
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
-          source-branch: release
-          target-branch: master

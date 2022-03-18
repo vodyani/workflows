@@ -14,7 +14,7 @@ on:
         type: string
 
 jobs:
-  publish_release:
+  auto_merge:
     runs-on: ubuntu-latest
     steps:
       # 1. Checkout github ref

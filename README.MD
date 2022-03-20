@@ -1,6 +1,6 @@
 # Vodyani Workflows
 
-*👷🏻‍♂️ Workflow settings for managing vodyani packages.*
+*👷🏻‍♂️ Workflow settings for managing vodyani workflows.*
 
 ## License
 

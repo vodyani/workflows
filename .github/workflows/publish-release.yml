@@ -25,4 +25,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
         run: |
-          gh release create --generate-notes ${{ env.PACKAGE_VERSION }}
+          gh release create --generate-notes v${{ env.PACKAGE_VERSION }}

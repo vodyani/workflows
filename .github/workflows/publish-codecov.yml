@@ -32,11 +32,11 @@ jobs:
 
       # 3. RUN install
       - name: install
-        run: npm ci && npm i -g codecov @vodyani/coverage-report
+        run: npm i && npm i -g codecov @vodyani/coverage-report
 
       # 4. RUN jest and build coverage report
       - name: run jest and build coverage report
-        run: JEST_REPORT_JSON=${REPORT_JSON} npm run test:coverage --ci --testResultsProcessor="${RESULT_PROCESSOR}"
+        run: JEST_REPORT_JSON=${REPORT_JSON} npm run test:coverage --i --testResultsProcessor="${RESULT_PROCESSOR}"
         env:
           REPORT_JSON: "./coverage/report.json"
           RESULT_PROCESSOR: "@vodyani/coverage-report"

@@ -38,7 +38,7 @@ jobs:
       - name: build
         if: ${{ inputs.enable_build }}
         run: |
-          npm ci
+          npm i
           npm run build
 
       # 4. RUN publish

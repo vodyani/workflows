@@ -32,8 +32,7 @@ jobs:
       # 3. RUN install
       - name: npm install
         run: |
-          npm ci
-          npm i && npm i -g eslint
+          npm ci && npm i -g eslint
 
       # 4. RUN eslint
       - name: run eslint

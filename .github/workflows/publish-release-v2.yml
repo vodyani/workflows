@@ -1,0 +1,24 @@
+name: "Publish Release And Package"
+
+on:
+  workflow_call:
+    secrets:
+        NPM_CI_TOKEN:
+          required: true
+        GITHUB_CI_TOKEN:
+          required: true
+
+jobs:
+  publish_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm i
+      - run: npm run build
+      - run: npm run release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_CI_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}

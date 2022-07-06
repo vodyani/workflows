@@ -16,9 +16,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+          token: ${{ secrets.GITHUB_CI_TOKEN }}
       - run: npm i
       - run: npm run build
       - run: npm run release:beta
         env:
           NPM_TOKEN: ${{ secrets.NPM_CI_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}

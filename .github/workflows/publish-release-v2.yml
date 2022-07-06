@@ -18,7 +18,7 @@ jobs:
           node-version: 16
       - run: npm i
       - run: npm run build
-      - run: npm run release
+      - run: npm run release:beta
         env:
           NPM_TOKEN: ${{ secrets.NPM_CI_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}

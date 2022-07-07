@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         node_version: ['12', '14', '16']
-        os: [ubuntu-latest, macOS-latest]
+        os: [ubuntu-latest]
     steps:
       # 1. Checkout github ref
       - uses: actions/checkout@v3
@@ -22,7 +22,6 @@ jobs:
           cache-name: cache-node-modules
         with:
           path: ~/.npm
-          # npm cache files are stored in `~/.npm` on Linux/macOS
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-

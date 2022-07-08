@@ -3,8 +3,8 @@ name: "Publish Release And Package"
 on:
   workflow_call:
     inputs:
-      ignore_build:
-        required: false
+      enable_build:
+        required: true
         type: boolean
     secrets:
         NPM_CI_TOKEN:
@@ -31,7 +31,7 @@ jobs:
         run: npm i
 
       - name: Build
-        if: ${{ inputs.ignore_build != true }} 
+        if: ${{ inputs.enable_build }} 
         run: npm run build
 
       - name: Publish

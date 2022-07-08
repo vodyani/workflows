@@ -1,0 +1,42 @@
+name: "Code check"
+
+on:
+  workflow_call:
+    inputs:
+      enable_test:
+        required: true
+        type: boolean
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node_version: ['12', '14', '16']
+        os: [ubuntu-latest]
+    steps:
+      # ① checkout to branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # ② set up node.js lts version 
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+
+      # ③ install npm dependencies package
+      - name: Install dependencies
+        run: npm i
+
+      # ④ run eslint
+      - name: Eslint
+        run: npm run lint
+
+      # ⑤ run unit test
+      # ⚠️ enable_test must be true
+      - name: Test
+        if: ${{ inputs.enable_test }} 
+        run: npm run test

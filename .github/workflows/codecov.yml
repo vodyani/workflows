@@ -1,0 +1,39 @@
+name: "Upload codecov report"
+
+on:
+  workflow_call:
+    secrets:
+        CODE_COV_CI_TOKEN:
+          required: true
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # ① checkout to branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # ② set up node.js lts version 
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+
+      # ③ install npm dependencies package
+      - name: Install dependencies
+        run: npm i && npm i -g codecov @vodyani/coverage-report
+
+      # ④ run jest and build coverage report
+      - name: Run unit test
+        run: JEST_REPORT_JSON=${REPORT_JSON} npm run test:coverage --i --testResultsProcessor="${RESULT_PROCESSOR}"
+        env:
+          REPORT_JSON: "./coverage/report.json"
+          RESULT_PROCESSOR: "@vodyani/coverage-report"
+
+      # ⑤ upload report
+      - name: upload report
+        run: cd coverage && codecov --disable=gcov --token=$CODE_COV_CI_TOKEN
+        env:
+          CODE_COV_CI_TOKEN: ${{ secrets.CODE_COV_CI_TOKEN }}

@@ -1,0 +1,46 @@
+name: "Semantic release"
+
+on:
+  workflow_call:
+    inputs:
+      enable_build:
+        required: true
+        type: boolean
+    secrets:
+        NPM_CI_TOKEN:
+          required: true
+        GITHUB_CI_TOKEN:
+          required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # ① checkout to branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # ② set up node.js lts version 
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+
+      # ③ install npm dependencies package
+      - name: Install dependencies
+        run: npm i
+
+      # ④ compile typescript or run webpack
+      # ⚠️ enable_build must be true
+      - name: Build
+        if: ${{ inputs.enable_build }} 
+        run: npm run build
+
+      # ⑤ publish npm package & github release by semantic-release
+      - name: Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_CI_TOKEN }}
+        run: npm run release

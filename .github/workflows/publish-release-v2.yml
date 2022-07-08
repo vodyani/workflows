@@ -31,7 +31,7 @@ jobs:
         run: npm i
 
       - name: Build
-        if: ${{ inputs.ignore_build }} != true
+        if: ${{ inputs.ignore_build != true }} 
         run: npm run build
 
       - name: Publish

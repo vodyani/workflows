@@ -34,9 +34,6 @@ jobs:
         if: ${{ inputs.enable_build }} 
         run: npm run build
 
-      - name: Create auth token
-        run: echo -e "//npm.pkg.github.com/:_authToken=${NPM_CI_TOKEN} \n//registry.npmjs.org/:_authToken=${NPM_CI_TOKEN}" > .npmrc
-
       - name: Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}

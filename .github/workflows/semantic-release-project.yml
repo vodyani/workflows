@@ -25,8 +25,6 @@ jobs:
           node-version: 'lts/*'
 
       - name: sync semantic-release-config
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
         run: git clone -b config/project https://github.com/vodyani/semantic-release-config.git
 
       - name: install semantic-release

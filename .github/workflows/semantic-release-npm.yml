@@ -28,6 +28,7 @@ jobs:
 
       - name: sync semantic-release-config
         run: git clone -b config/npm https://github.com/vodyani/semantic-release-config.git
+        run: cp ./temp-semantic-release-config/.releaserc.js .releaserc.js
 
       - name: install semantic-release
         run: npm i -D semantic-release@19.0.3 @semantic-release/changelog@6.0.1 @semantic-release/git@10.0.1

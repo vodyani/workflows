@@ -1,0 +1,47 @@
+name: "npm semantic release"
+
+on:
+  workflow_call:
+    inputs:
+      enable_build:
+        required: true
+        type: boolean
+    secrets:
+        NPM_CI_TOKEN:
+          required: true
+        GITHUB_CI_TOKEN:
+          required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: setup node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+
+      - name: sync semantic-release-config
+        run: git clone -b config/npm https://github.com/vodyani/semantic-release-config.git
+
+      - name: install semantic-release
+        run: npm i -D semantic-release@19.0.3 @semantic-release/changelog@6.0.1 @semantic-release/git@10.0.1
+
+      - name: install dependencies
+        run: npm i
+
+      # ⚠️ enable_build must be true
+      - name: build
+        if: ${{ inputs.enable_build }} 
+        run: npm run build
+
+      - name: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_CI_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_CI_TOKEN }}
+        run: npx semantic-release
